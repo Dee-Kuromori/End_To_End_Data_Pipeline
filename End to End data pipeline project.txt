@@ -1,0 +1,100 @@
+so what are the things we want to
+
+project 1: End to End data pipeline
+start on Monday 9/25
+duration is 10-15 days(2-3 weeks)
+End-to-end pipeline
+
+part 1
+	1. connect spark from a database(Postgres) using both scala and python
+	2. transformation on spark
+	3. incremental load into Hive
+
+
+part 2
+	1. get data from API using Scala
+	2. load into Kafka topic
+	3. read from Kafka topic using python/pyspark
+	4. process data into pyspark
+	5. load into hive or HBase
+	6. build data flow using Nifi
+
+part 3
+	1. create a machine learning prediction model using Pyspark
+	2. Deploy the complete pipeline using Jenkins, docker, and Kubernetes
+	3. create BI(business intelligence) dashboard using superset
+
+Action Items
+	1. work with connectivity with Postgres using spark
+		-one works with Scala
+		-one works with python
+	2. work with different types of transformations
+		-find 10 different transformations
+	3. connecting Kafka with API and load the data into Kafka
+		-getting data from Kafka
+		-loading it into hive or Hbase using pyspark
+	4. machine learning prediction model 
+		-find historical dataset (2-3 years)
+		-create a prediction model in Hive using historical data we pulled in
+		-get real-time data from Kafka to put in a trained prediction model
+	5. automate using Jenkins, Kubernetes, and docker
+	6. create a dashboard in a superset
+
+Things we have done:
+database name: fraud_project
+table_name: fraud_table
+
+Extra_notes:
+from postgres using sqoop load to hdfs
+
+create hive table
+
+automate to oozie
+
+Incremental load from spark
+
+create api
+
+read csv, and make to api json
+
+once api created
+
+get that api in scala
+
+parse api json in scala
+
+
+Example project topics
+first batch
+	- API from flight, get flight delay prediction
+
+second batch
+	- stock price prediction
+
+third batch
+	- train delay prediction
+
+fourth batch
+	- heart disease prediction
+
+fifth batch
+	- bitcoin
+
+
+
+
+15-day sprint
+initiative for scrum master
+	-organize tasks and subtasks,
+	-pick jira or alternative free account(4-5 members))
+
+The team lead will technical architecture
+	-where we are going, issues faced, assign tasks, monitor tasks
+	-takes updates from the team
+		-progress
+		-what has been done
+		-who has done what
+
+
+
+project 2: next project in cloud service 
