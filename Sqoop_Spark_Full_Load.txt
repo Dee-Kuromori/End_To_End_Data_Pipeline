@@ -1,0 +1,35 @@
+#########################steps to use spoop to full load your RDBMS table using sqoop############################
+
+
+###step 1###
+##run this sqoop import command with the name of your table and the filepath with new directory you want data saved in HDFS as
+
+sqoop import --connect jdbc:postgresql://ec2-3-9-191-104.eu-west-2.compute.amazonaws.com:5432/testdb --username consultants --password WelcomeItc@2022 --table frauddetection --m 1 --target-dir /tmp/bd_us/Demetric/sqoop/sqoop_fraud_detection
+
+
+#use the path of output file for table in your python script(below is an example of my path for output file)
+/tmp/bd_us/Demetric/sqoop/sqoop_fraud_detection/part-m-00000
+
+#####step 2#####
+#write pyspark script to write your output to table in hive as python file and save it in file on local linux server([ec2-user@ip-172-31-13-101])
+#example of pyspark script below
+#you can change values of database_name and table_name to your database and table
+
+
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName("Python Spark SQL basic example").config("spark.sql.catalogImplementation","hive").enableHiveSupport().getOrCreate()
+df = spark.read.csv(r"/tmp/bd_us/Demetric/sqoop/sqoop_fraud_detection/part-m-00000", header=True, inferSchema=True)
+database_name = "fraud_project"
+spark.sql("USE "+database_name)
+table_name = "fraud_detection_table"
+spark.sql("USE "+database_name)
+spark.sql("DROP TABLE IF EXISTS "+table_name)
+df.write.mode("overwrite").saveAsTable(database_name+"."+table_name)
+
+
+
+
+#######step 3########
+#submit pyspark python script to spark using spark-submit
+#example below
+spark-submit fraud_detection_script.py
