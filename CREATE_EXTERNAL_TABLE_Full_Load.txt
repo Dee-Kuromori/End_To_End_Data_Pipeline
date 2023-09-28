@@ -1,0 +1,52 @@
+###############################Sqoop_import_into_HIVE_Using_Exteral_Table##############################################
+
+###step 1###
+##run this sqoop import command with the name of your table and the filepath with new directory you want data saved in HDFS as
+
+sqoop import --connect jdbc:postgresql://ec2-3-9-191-104.eu-west-2.compute.amazonaws.com:5432/testdb --username consultants --password WelcomeItc@2022 --table frauddetection --m 1 --target-dir /tmp/bd_us/Demetric/sqoop/sqoop_fraud_detection
+
+#use the path of output file for table in your python script(below is an example of my path for output file)
+/tmp/bd_us/Demetric/sqoop/sqoop_fraud_detection/part-m-00000
+
+
+
+#####step 2#####
+#write hive .hql script to write your output to table in hive as .hql file and save it in file on local linux server([ec2-user@ip-172-31-13-101])
+#example of hive .hql script script below
+
+
+CREATE EXTERNAL TABLE IF NOT EXISTS fraud_project.fraud_full_load_external (
+    step STRING,
+    "type" STRING,
+    amount STRING,
+    nameorig STRING,
+    oldbalanceorg STRING,
+    newbalanceorig STRING,
+    namedest STRING,
+    oldbalancedest STRING,
+    newbalancedest STRING,
+    isfraud STRING,
+    isflaggedfraud STRING,
+    row_id STRING
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE
+LOCATION '/tmp/bd_us/Demetric/sqoop/sqoop_fraud_detection/'
+TBLPROPERTIES ("skip.header.line.count"="1");
+
+
+####Step 3: Put the hive .hql file in hdfs
+#example below
+hadoop fs -put fraud_detection_hive.hql /tmp/bd_us/Demetric/fraud_detection_folder
+
+
+######step 4: set up work flow in oozie#####
+
+######Extra Notes############
+To find the full load table in hive:
+Database: fraud_project
+Table:  fraud_full_load_external
+
+
